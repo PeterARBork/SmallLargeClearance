@@ -67,7 +67,6 @@ solcV = sol[cV(t,)]
 solcSAS = sol[cSAS(t,)]
 solcB = sol[cB(t,)]
 
-
 baselinesolc = baselinesol[c(t, x)]
 baselinesolcV = baselinesol[cV(t,)]
 baselinesolcSAS = baselinesol[cSAS(t,)]
@@ -89,65 +88,3 @@ anim = @animate for i in 1:length(discrete_t)
     plot(p1, p2, p3, layout=(1, 3))
 end
 gif(anim, "high_kp.gif",fps=10)
-
-sol = baselinesol
-discrete_x = sol[x]
-discrete_t = sol[t]
-solc = sol[c(t, x)]
-solcV = sol[cV(t,)]
-solcSAS = sol[cSAS(t,)]
-solcB = sol[cB(t,)]
-
-discrete_x = sol[x]
-discrete_t = sol[t]
-
-anim = @animate for i in 1:length(discrete_t)
-    p1 = bar([1., ], [solcV[i], ], ylim=[0, 10], xticks=([1, ], ["ventricle"]), label="", ylabel="c", title="ventricle")
-    p2 = plot(discrete_x, solc[i, :], label=""; legend=false, title="brain", xlabel="mm", ylim=[0,10])
-    p3 = bar([1, 2, ], [solcSAS[i], solcB[i], ], xticks=([1, 2], ["SAS", "blood"]), ylim=[0, 10], label="", title="SAS, blood")
-    plot(p1, p2, p3, layout=(1, 3))
-end
-gif(anim, "baseline.gif",fps=10)
-
-
-
-shuntx = 0.9 * parameters.L
-begin
-    p = plot(layout=(4, 3), size=(700, 700))
-
-    plotsoloverspace!(baselinesol; subplot=1)
-    plotsolovertime!(baselinesol; subplot=2)
-    plotmodelfiber!(baselinesol, shuntx, ylims=(0,2); subplot=3)
-
-    plotsoloverspace!(highQlsol; legend=false, subplot=4)
-    plotsolovertime!(highQlsol; legend=false, subplot=5)
-    plotmodelfiber!(highQlsol, shuntx, ylims=(0,2); subplot=6)
-
-    plotsoloverspace!(highDmsol; legend=false, subplot=7)
-    plotsolovertime!(highDmsol; legend=false, subplot=8)
-    plotmodelfiber!(highDmsol, shuntx, ylims=(0,2); subplot=9)
-
-    plotsoloverspace!(highspeedsol; legend=false, subplot=10)
-    plotsolovertime!(highspeedsol; legend=false, subplot=11)
-    plotmodelfiber!(highspeedsol, shuntx, ylims=(0,2); subplot=12)
-
-    p
-end
-
-begin
-    p = plot(
-        layout=(2, 3),
-    )
-
-    plotsoloverspace!(kxsol; subplot=1)
-    plotsoloverspace!(shuntsol; subplot=4)
-
-    plotsolovertime!(kxsol; subplot=2)
-    plotsolovertime!(shuntsol; subplot=5)
-
-    plotmodelfiber!(kxsol; subplot=3)
-    plotmodelfiber!(shuntsol; subplot=6)
-
-    plotMiao!(Miaodata; color=:grey, linestyle=:dash, subplot=3)
-    plotMiao!(Miaodata; color=:grey, linestyle=:dash, subplot=6)
-end
